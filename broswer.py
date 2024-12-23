@@ -21,23 +21,23 @@ handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
 
 line_bot_api.push_message('U99de7fa38147448fa75424b52482549f', TextSendMessage(text='你可以開始了'))
 
-# 監聽所有來自 /callback 的 Post Request
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
+# # 監聽所有來自 /callback 的 Post Request
+# @app.route("/callback", methods=['POST'])
+# def callback():
+#     # get X-Line-Signature header value
+#     signature = request.headers['X-Line-Signature']
 
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+#     # get request body as text
+#     body = request.get_data(as_text=True)
+#     app.logger.info("Request body: " + body)
 
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
+#     # handle webhook body
+#     try:
+#         handler.handle(body, signature)
+#     except InvalidSignatureError:
+#         abort(400)
 
-    return 'OK'
+#     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
 
@@ -72,7 +72,7 @@ def reply_message(text):
 
 def get_taiwan_weather(location):
     api_key = "你的中央氣象局API Key"
-    url = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={api_key}&locationName={location}"
+    url = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={CWA-3995D289-1BE9-45B6-AD6F-5496915DB347}&locationName={location}"
     response = requests.get(url).json()
     try:
         location_data = response['records']['location'][0]
