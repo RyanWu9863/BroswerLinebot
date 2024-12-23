@@ -71,7 +71,7 @@ def reply_message(text):
     })
 
 def get_taiwan_weather(location):
-    api_key = "CWA-3995D289-1BE9-45B6-AD6F-5496915DB347"
+    api_key = "49fb0eb9d77aca183081160dd1f71e47"
     url = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={api_key}&locationName={location}"
     response = requests.get(url).json()
     try:
