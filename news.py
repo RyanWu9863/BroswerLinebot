@@ -2,7 +2,7 @@ import requests
 
 def get_news():
     api_key = "73f4a1974f104ae3b322e7e356ad6f9d"
-    url = f"https://newsapi.org/v2/top-headlines?country=tw&apiKey={api_key}"
+    url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
