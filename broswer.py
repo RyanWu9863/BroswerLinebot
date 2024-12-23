@@ -42,15 +42,11 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 
 # LINE Webhook Endpoint
-@app.route('/webhook', methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
+def handle_message(event):
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text)
+    )
     data = request.json
     user_message = data['events'][0]['message']['text']
 
@@ -58,17 +54,15 @@ def callback():
     if user_message.startswith("天氣"):
         location = user_message.split(" ")[1]
         weather_info = get_weather(location)
-        return reply_message(weather_info)
-    
+        line_bot_api.reply_message(event.reply_token, reply_message(weather_info))
     # 新聞查詢
     elif user_message.startswith("新聞"):
         category = user_message.split(" ")[1]
         news_info = fetch_taiwan_news(category)
-        return reply_message(news_info)
-    
+        line_bot_api.reply_message(event.reply_token, reply_message(news_info))
     # 未識別的訊息
     else:
-        return reply_message("請輸入有效指令，例如：天氣 台北 或 新聞 財經")
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入有效指令，例如：天氣 台北 或 新聞 財經"))
 
 # 回應格式
 def reply_message(text):
