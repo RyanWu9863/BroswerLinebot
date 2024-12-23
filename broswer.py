@@ -14,12 +14,12 @@ import requests
 import feedparser
 app = Flask(__name__)
 
-# 必須放上自己的Channel Access Token
-line_bot_api = LineBotApi('S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
-# 必須放上自己的Channel Secret
-handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
+# # 必須放上自己的Channel Access Token
+# line_bot_api = LineBotApi('S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
+# # 必須放上自己的Channel Secret
+# handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
 
-line_bot_api.push_message('U99de7fa38147448fa75424b52482549f', TextSendMessage(text='你可以開始了'))
+# line_bot_api.push_message('U99de7fa38147448fa75424b52482549f', TextSendMessage(text='你可以開始了'))
 
 # # 監聽所有來自 /callback 的 Post Request
 # @app.route("/callback", methods=['POST'])
@@ -50,7 +50,7 @@ def webhook():
     # 天氣查詢
     if user_message.startswith("天氣"):
         location = user_message.split(" ")[1]
-        weather_info = get_taiwan_weather(location)
+        weather_info = get_weather(location)
         return reply_message(weather_info)
     
     # 新聞查詢
@@ -70,7 +70,7 @@ def reply_message(text):
         "messages": [{"type": "text", "text": text}]
     })
 
-def get_taiwan_weather(location):
+def get_weather(location):
     api_key = "49fb0eb9d77aca183081160dd1f71e47"
     url = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={api_key}&locationName={location}"
     response = requests.get(url).json()
