@@ -39,7 +39,7 @@ app = Flask(__name__)
 
 #     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
+# @handler.add(MessageEvent, message=TextMessage)
 
 # LINE Webhook Endpoint
 @app.route('/webhook', methods=['POST'])
