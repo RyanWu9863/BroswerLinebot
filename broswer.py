@@ -43,44 +43,38 @@ def callback():
 
 # LINE Webhook Endpoint
 def handle_message(event):
-    data = request.json
-    user_message = data['events'][0]['message']['text']
+    user_message = event.message.text
 
-    # 天氣查詢
     if user_message.startswith("天氣"):
-        location = user_message.split(" ")[1]
-        weather_info = get_weather(location)
-        line_bot_api.reply_message(event.reply_token, reply_message(weather_info))
-    # 新聞查詢
+        location = user_message.split(" ")[1] if len(user_message.split(" ")) > 1 else "台北"
+        weather_info = get_taiwan_weather(location)
+        reply_text = weather_info
     elif user_message.startswith("新聞"):
-        category = user_message.split(" ")[1]
+        category = user_message.split(" ")[1] if len(user_message.split(" ")) > 1 else "最新"
         news_info = fetch_taiwan_news(category)
-        line_bot_api.reply_message(event.reply_token, reply_message(news_info))
-    # 未識別的訊息
+        reply_text = news_info
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入有效指令，例如：天氣 台北 或 新聞 財經"))
+        reply_text = "請輸入有效指令，例如：天氣 台北 或 新聞 財經"
 
-# 回應格式
-def reply_message(text):
-    return jsonify({
-        "replyToken": "xxx",
-        "messages": [{"type": "text", "text": text}]
-    })
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
-def get_weather(location):
-    api_key = "49fb0eb9d77aca183081160dd1f71e47"
+def get_taiwan_weather(location):
+    api_key = "CWA-3995D289-1BE9-45B6-AD6F-5496915DB347"
     url = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={api_key}&locationName={location}"
-    response = requests.get(url).json()
     try:
-        location_data = response['records']['location'][0]
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        location_data = data['records']['location'][0]
         weather = location_data['weatherElement'][0]['time'][0]['parameter']['parameterName']
         temperature = location_data['weatherElement'][2]['time'][0]['parameter']['parameterName']
         return f"{location} 天氣：{weather}，溫度：{temperature}°C"
+    except requests.exceptions.RequestException:
+        return "無法取得天氣資訊，請稍後再試。"
     except IndexError:
         return "查無此地區天氣資訊，請確認地名是否正確。"
 
 def fetch_taiwan_news(category):
-    # 定義 RSS 來源
     rss_sources = {
         "最新": "https://news.ltn.com.tw/rss/focus.xml",
         "焦點": "https://news.ltn.com.tw/rss/politics.xml",
@@ -88,18 +82,17 @@ def fetch_taiwan_news(category):
         "政治": "https://news.ltn.com.tw/rss/politics.xml",
         "財經": "https://news.ltn.com.tw/rss/business.xml"
     }
-    
-    # 找不到分類的處理
     if category not in rss_sources:
         return "無法辨識分類，請選擇：最新、焦點、旅遊、政治、財經。"
-    
-    # 解析 RSS
+
     rss_url = rss_sources[category]
-    feed = feedparser.parse(rss_url)
-    news_list = []
-    for entry in feed['entries'][:5]:
-        news_list.append(f"{entry['title']} - {entry['link']}")
-    return "\n".join(news_list)
+    try:
+        feed = feedparser.parse(rss_url)
+        if not feed.entries:
+            return "無法取得新聞，請稍後再試。"
+        return "\n".join(f"{entry['title']} - {entry['link']}" for entry in feed.entries[:5])
+    except Exception:
+        return "無法取得新聞資訊，請稍後再試。"
 
 
 #主程式
