@@ -36,7 +36,7 @@ def callback():
 def handle_message(event):
     user_message = event.message.text
     if "天氣" in user_message:
-        response = get_weather("Taipei)
+        response = get_weather("Taipei")
     elif "新聞" in user_message:
         response = get_news()
     else:
