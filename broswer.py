@@ -43,10 +43,6 @@ def callback():
 
 # LINE Webhook Endpoint
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text)
-    )
     data = request.json
     user_message = data['events'][0]['message']['text']
 
