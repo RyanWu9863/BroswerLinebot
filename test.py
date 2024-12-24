@@ -99,9 +99,9 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, carousel_template_message)
         
-    elif re.match('電影推薦',user_message):
+    elif re.match('推薦電影',user_message):
         image_carousel_template_message = TemplateSendMessage(
-            alt_text='電影推薦清單',
+            alt_text='推薦電影清單',
             template=ImageCarouselTemplate(
                 columns=[
                     ImageCarouselColumn(
