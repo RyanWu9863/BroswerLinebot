@@ -98,8 +98,6 @@ def handle_message(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, carousel_template_message)
-    else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_message))
         
     if re.match('電影推薦"',user_message):
         image_carousel_template_message = TemplateSendMessage(
