@@ -101,7 +101,7 @@ def handle_message(event):
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_message))
         
-    if user_message == "電影推薦":
+    if re.match('電影推薦"',user_message):
         image_carousel_template_message = TemplateSendMessage(
             alt_text='電影推薦清單',
             template=ImageCarouselTemplate(
