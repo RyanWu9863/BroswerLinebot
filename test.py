@@ -44,53 +44,68 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_message =event.message.text
-    if re.match('推薦景點',user_message):
+    if re.match('我想出去玩',user_message):
         carousel_template_message = TemplateSendMessage(
             alt_text='熱門旅行景點',
             template=CarouselTemplate(
                 columns=[
                     CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/Ay7IkdS.jpg',
-                        title='台北',
-                        text='Taipei',
+                        title='北部推薦景點',
+                        text='North',
                         actions=[
                             MessageAction(
                                 label='導覽',
-                                text='台北是一座熱鬧的大都會，在這裡，亮麗的摩天大樓和香煙裊裊的古廟彼此共存。 您可以前往台北 101 眺望市景，然後再前往西門町盡情購物 (當然，一定要手拿一杯珍珠奶茶)。 晚上的時候，您可以踏遍眾多夜市品嚐美食。 這裡有超大雞排到臭豆腐等街頭美食，絕對會讓您上癮，等不及要吃下更多美食。'
+                                text='台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。'
                             ),
                             URIAction(
                                 label='詳細資訊',
-                                uri='https://www.tripadvisor.com.tw/Tourism-g293913-Taipei-Vacations.html'
+                                uri='https://taiwantour.net/taiwan-attractions/'
                             )
                         ]
                     ),
                     CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/7NRdD4E.jpg',
-                        title='台中',
-                        text='Taichung',
+                        title='中部推薦景點',
+                        text='West',
                         actions=[
                             MessageAction(
                                 label='導覽',
-                                text='在眾多的旅遊景點中，台中有類似於東京或曼哈頓的熱鬧購物體驗、繁華的夜生活，還有各式各樣的美食，就算是最挑剔的老饕，也能盡興而歸。 來到這座城市，旅客可以在寺廟、市場、公園和博物館大飽眼福。 如果是全家出遊，不妨前往台中國立自然科學博物館，或前往逢甲夜市購買本地商品。 不過，台中最有名的是泡沫紅茶，這可以說是台中最有名的飲料。'
+                                text='台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。'
                             ),
                             URIAction(
                                 label='詳細資訊',
-                                uri='https://www.tripadvisor.com.tw/Tourism-g297910-Taichung-Vacations.html'
+                                uri='https://travel.line.me/article/A1fp6dm8v0'
                             )
                         ]
                     ),
                     CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/l32E20S.jpg',
-                        title='台南',
-                        text='Tainan',
+                        title='南部推薦景點',
+                        text='South',
                         actions=[
                             MessageAction(
                                 label='導覽',
-                                text='臺南為臺灣最具歷史的都市，過去曾為臺灣首府，目前則是兼具商業氣息與歷史人文的現代都市。 臺南也是宗教信仰的中心，擁有上千所寺院其中並包括全台首學孔子廟，且慶典、遶境盛會不絕。 漫步國華街，一路品嘗臺灣特產與閒逛在地傳統菜場和市集。 參觀臺灣歷史博物館，一探臺灣人物與歷史。 奇美博物館坐擁美麗花園，蒐羅藝術品和樂器等私人收藏。'
+                                text='台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。'
                             ),
                             URIAction(
                                 label='詳細資訊',
-                                uri='https://www.tripadvisor.com.tw/Tourism-g293912-Tainan-Vacations.html'
+                                uri='https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/616EwoZ.jpg',
+                        title='東部推薦景點',
+                        text='East',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                text='台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://fullfen.tw/taitung-lazy-bag/'
                             )
                         ]
                     )
