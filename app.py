@@ -11,7 +11,7 @@ import os  # 確保匯入 os 模組
 app = Flask(__name__)
 
 # 必須放上自己的 Channel Access Token
-line_bot_api = LineBotApi('66YmqXw11hVa6I7CBtb3gtWoTvhnhbXul0z6sX71D/5XQhOALiLzoDvo3wz7i0+15IXcV/LNdzLcBesfJN+71QSk8CFUfc8GnsZ9wmxdwxJ+jdNtNs7vneYrzoin9AfJ3gv6djQU5Hu9B7/g04bTRgdB04t89/1O/w1cDnyilFU=S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
 
 # 必須放上自己的 Channel Secret
 handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
