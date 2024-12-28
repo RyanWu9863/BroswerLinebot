@@ -114,7 +114,7 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, carousel_template_message)
         
-    elif re.match('推薦電影',user_message):
+    elif re.match('我想看電影',user_message):
         image_carousel_template_message = TemplateSendMessage(
             alt_text='推薦電影清單',
             template=ImageCarouselTemplate(
@@ -163,11 +163,92 @@ def handle_message(event):
                                 data='action=SUMMER_TUNNEL'
                             )
                         )
+                    ImageCarouselColumn(
+                        image_url='https://i.imgur.com/stm5m9e.jpg',
+                        action=PostbackAction(
+                            label='更多電影',
+                            display_text=(
+                                "更多電影介紹:http://www.atmovies.com.tw/movie/next/"                              
+                            ),
+                                data='action=SUMMER_TUNNEL'
+                            )
+                        )
                     ]
                 )
             )
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)    
-
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        
+    elif re.match('我想吃飯',user_message):
+        carousel_template_message = TemplateSendMessage(
+            alt_text='推薦餐廳',
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/LGjze2M.jpg',
+                        title='北部推薦美食',
+                        text='North',
+                        actions=[
+                            MessageAction(
+                                label='介紹',
+                                text='台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/MmtibnZ.jpg',
+                        title='中部推薦美食',
+                        text='West',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                text='中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/HnHzZDr.jpg',
+                        title='南部推薦美食',
+                        text='South',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                text='南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/c5YLRbi.jpg',
+                        title='東部推薦美食',
+                        text='East',
+                        actions=[
+                            MessageAction(
+                                label='導覽',
+                                text='東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！'
+                            ),
+                            URIAction(
+                                label='詳細資訊',
+                                uri='https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/'
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)        
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「我想出去玩」、「我想看電影」或「我想吃飯」'))
 
 #主程式
 import os
