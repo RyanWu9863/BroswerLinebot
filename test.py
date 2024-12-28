@@ -162,7 +162,7 @@ def handle_message(event):
                             ),
                                 data='action=SUMMER_TUNNEL'
                             )
-                        )
+                        ),
                     ImageCarouselColumn(
                         image_url='https://i.imgur.com/stm5m9e.jpg',
                         action=PostbackAction(
