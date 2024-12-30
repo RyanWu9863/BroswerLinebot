@@ -45,7 +45,7 @@ region_data = [
         "title": "南部推薦景點",
         "text": "South",
         "postback_data": {
-            "guide": "guide_South",
+            "guide": "guide_south",
             "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
         }
     },
@@ -54,7 +54,7 @@ region_data = [
         "title": "東部推薦景點",
         "text": "East",
         "postback_data": {
-            "guide": "guide_East",
+            "guide": "guide_east",
             "url": "https://fullfen.tw/taitung-lazy-bag/"
         }
     }
@@ -108,33 +108,41 @@ movie_data = [
 ]
 food_data = [
     {
+        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
         "title": "北部推薦美食",
         "text": "North",
-        "thumbnail": "https://i.imgur.com/LGjze2M.jpg",
-        "description": '台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！',
-        "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        "postback_data": {
+            "food": "food_north",
+            "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        }
     },
     {
-        "title": "中部推薦景美食",
-        "text": "West",
         "thumbnail": "https://i.imgur.com/MmtibnZ.jpg",
-        "description": "中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！",
-        "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
+        "title": "中部推薦美食",
+        "text": "North",
+        "postback_data": {
+            "food": "food_west",
+            "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
         "title": "南部推薦美食",
         "text": "South",
-        "thumbnail": "https://i.imgur.com/HnHzZDr.jpg",
-        "description": "南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！",
-        "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
+        "postback_data": {
+            "food": "food_south",
+            "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/c5YLRbi.jpg",
         "title": "東部推薦美食",
         "text": "East",
-        "thumbnail": "https://i.imgur.com/c5YLRbi.jpg",
-        "description": "東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！",
-        "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
-    }
+        "postback_data": {
+            "food": "food_east",
+            "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        }
+    },
 ]
 
 # 監聽所有來自 /callback 的 Post Request
@@ -208,17 +216,33 @@ def handle_postback(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。")
-        )    
+        )
+    elif data == "food_north":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！")
+        )
+    elif data == "food_west":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！")
+        )
+    elif data == "food_south":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！")
+        )
+    elif data == "food_east":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！")
+        )      
     elif data.startswith("https://"):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=f"詳細資訊：{data}")
         )
 
-# "台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。"
-# "台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。"
-# "台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。"
-# "台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。"
 #訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
