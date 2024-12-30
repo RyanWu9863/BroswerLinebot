@@ -265,7 +265,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
 
     elif re.match('我想吃東西', user_message):
-        columns = [create_image_carousel_column(food) for food in food_data]
+        columns = [create_carousel_column(food) for food in food_data]
         carousel_template_message = TemplateSendMessage(
             alt_text='推薦美食清單',
             template=CarouselTemplate(columns=columns)
