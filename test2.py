@@ -73,8 +73,8 @@ movie_data = [
         "title": "排球少年",
         "thumbnail": "https://i.imgur.com/UKtun5m.jpg",
         "description": (
-            "劇情介紹: 烏野高中與音駒高中的宿命對決，精彩排球大賽即將展開！"
-            "上映日期: 2024/4/12\n觀看預告片: https://www.youtube.com/watch?v=gK6RbuM3U7Y"
+            "劇情介紹: 小丑亞瑟在精神病院中遇見哈莉·奎茵，展開危險又扭曲的愛情故事。\n"
+            "上映日期: 2024/10/2\n觀看預告片: https://www.youtube.com/watch?v=gK6RbuM3U7Y"
         ),
         "data": "action=HAIKYUUA"
     },
@@ -83,7 +83,7 @@ movie_data = [
         "thumbnail": "https://i.imgur.com/v49IxTk.jpg",
         "description": (
             "劇情介紹: 烏野高中與音駒高中的宿命對決，精彩排球大賽即將展開！"
-            "上映日期: 2024/4/12\n觀看預告片: https://www.youtube.com/watch?v=gK6RbuM3U7Y"
+            "上映日期: 2024/4/12\n觀看預告片: https://www.youtube.com/watch?v=rIhJSOArJVc"
         ),
         "data": "action=JOKER"
     },
@@ -273,7 +273,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_template_message)
 
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「我想出去玩」、「我想看電影」或「我想吃東西」'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「我想出去玩」、「我想看電影」或「我想吃東西」!'))
 
 #主程式
 import os
