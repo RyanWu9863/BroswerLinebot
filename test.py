@@ -23,32 +23,40 @@ line_bot_api.push_message('U99de7fa38147448fa75424b52482549f', TextSendMessage(t
 
 region_data = [
     {
+        "thumbnail": "https://i.imgur.com/Ay7IkdS.jpg",
         "title": "北部推薦景點",
         "text": "North",
-        "thumbnail": "https://i.imgur.com/Ay7IkdS.jpg",
-        "description": "台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。",
-        "url": "https://taiwantour.net/taiwan-attractions/"
+        "postback_data": {
+            "guide": "guide_north",
+            "url": "https://taiwantour.net/taiwan-attractions/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
         "title": "中部推薦景點",
         "text": "West",
-        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
-        "description": "台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。",
-        "url": "https://travel.line.me/article/A1fp6dm8v0"
+        "postback_data": {
+            "guide": "guide_west",
+            "url": "https://travel.line.me/article/A1fp6dm8v0"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/l32E20S.jpg",
         "title": "南部推薦景點",
         "text": "South",
-        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
-        "description": "台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。",
-        "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
+        "postback_data": {
+            "guide": "guide_South",
+            "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
         "title": "東部推薦景點",
         "text": "East",
-        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
-        "description": "台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。",
-        "url": "https://fullfen.tw/taitung-lazy-bag/"
+        "postback_data": {
+            "guide": "guide_East",
+            "url": "https://fullfen.tw/taitung-lazy-bag/"
+        }
     }
 ]
 movie_data = [
@@ -154,11 +162,20 @@ def create_carousel_column(data):
         title=data["title"],
         text=data["text"],
         actions=[
-            MessageAction(label="導覽", text=data["description"]),
-            URIAction(label="詳細資訊", uri=data["url"])
-        ]
-    )
-
+             PostbackAction(
+                label="導覽",
+                data=data["postback_data"]["guide"],
+                display_text="顯示導覽內容"  # 客戶端顯示的訊息
+            ),
+            PostbackAction(
+                label="詳細資訊",
+                data=data["postback_data"]["url"],
+                display_text="詳細資訊連結"  # 客戶端顯示的訊息
+                )
+            ]
+        )
+# MessageAction(label="導覽", text=data["description"]),
+# URIAction(label="詳細資訊", uri=data["url"])
 def create_image_carousel_column(data):
     """動態生成 ImageCarouselColumn"""
     return ImageCarouselColumn(
@@ -169,7 +186,39 @@ def create_image_carousel_column(data):
             data=data["data"]
         )
     )
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if data == "guide_north":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。")
+        )
+    elif data == "guide_west":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。")
+        )
+    elif data == "guide_south":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。")
+        )
+    elif data == "guide_east":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。")
+        )    
+    elif data.startswith("https://"):
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"詳細資訊：{data}")
+        )
 
+# "台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。"
+# "台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。"
+# "台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。"
+# "台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。"
 #訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
@@ -179,10 +228,10 @@ def handle_message(event):
     if re.match('我想出去玩', user_message):
         columns = [create_carousel_column(region) for region in region_data]
         carousel_template_message = TemplateSendMessage(
-            alt_text='熱門旅行景點',
+            alt_text="熱門旅行景點",
             template=CarouselTemplate(columns=columns)
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message) 
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
 
     elif re.match('我想看電影', user_message):
         columns = [create_image_carousel_column(movie) for movie in movie_data]
