@@ -182,8 +182,8 @@ def handle_message(event):
             alt_text='熱門旅行景點',
             template=CarouselTemplate(columns=columns)
         )
-        line_bot_api.reply_message(event.reply_token, carousel_template_message)
-    
+        line_bot_api.reply_message(event.reply_token, carousel_template_message) 
+
     elif re.match('我想看電影', user_message):
         columns = [create_image_carousel_column(movie) for movie in movie_data]
         image_carousel_template_message = TemplateSendMessage(
@@ -193,12 +193,12 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
 
     elif re.match('我想吃東西', user_message):
-        columns = [create_image_carousel_column(movie) for movie in food_data]
-        image_carousel_template_message = TemplateSendMessage(
+        columns = [create_image_carousel_column(food) for food in food_data]
+        carousel_template_message = TemplateSendMessage(
             alt_text='推薦美食清單',
-            template=ImageCarouselTemplate(columns=columns)
+            template=CarouselTemplate(columns=columns)
         )
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
 
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「我想出去玩」、「我想看電影」或「我想吃東西」'))
