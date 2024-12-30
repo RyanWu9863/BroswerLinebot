@@ -112,7 +112,7 @@ food_data = [
         "title": "北部推薦美食",
         "text": "North",
         "postback_data": {
-            "food": "food_north",
+            "guide": "food_north",
             "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
         }
     },
@@ -121,7 +121,7 @@ food_data = [
         "title": "中部推薦美食",
         "text": "North",
         "postback_data": {
-            "food": "food_west",
+            "guide": "food_west",
             "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
         }
     },
@@ -130,7 +130,7 @@ food_data = [
         "title": "南部推薦美食",
         "text": "South",
         "postback_data": {
-            "food": "food_south",
+            "guide": "food_south",
             "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
         }
     },
@@ -139,7 +139,7 @@ food_data = [
         "title": "東部推薦美食",
         "text": "East",
         "postback_data": {
-            "food": "food_east",
+            "guide": "food_east",
             "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
         }
     },
@@ -182,8 +182,7 @@ def create_carousel_column(data):
                 )
             ]
         )
-# MessageAction(label="導覽", text=data["description"]),
-# URIAction(label="詳細資訊", uri=data["url"])
+
 def create_image_carousel_column(data):
     """動態生成 ImageCarouselColumn"""
     return ImageCarouselColumn(
