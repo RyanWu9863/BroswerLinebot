@@ -108,7 +108,7 @@ movie_data = [
 ]
 food_data = [
     {
-        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
+        "thumbnail": "https://i.imgur.com/LGjze2M.jpg",
         "title": "北部推薦美食",
         "text": "North",
         "postback_data": {
@@ -126,7 +126,7 @@ food_data = [
         }
     },
     {
-        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
+        "thumbnail": "https://i.imgur.com/HnHzZDr.jpg",
         "title": "南部推薦美食",
         "text": "South",
         "postback_data": {
