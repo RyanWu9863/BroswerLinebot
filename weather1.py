@@ -16,8 +16,8 @@ import json,requests
 app = Flask(__name__)
 
 # 必須放上自己的 Channel Access Token 和 Channel Secret
-line_bot_api = LineBotApi('OCSns1VNyMR64NfFueLh0wMzJIu54QIg6nZbJW5lYHnE1ov10koZTO5Q7HcrmYu/PnBf/QJKDILFNa/rZyVYzdZLsb/qHgAkPVroYhwXxzKMFpdbU7DltfIWyiqcMQK5tzwg2OwkzngqQqTkKcFQzgdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('1c98bfe9f1ebb2d7e5e2fc0fbf5f6eff')
+line_bot_api = LineBotApi('OS7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
 
 @app.route("/callback", methods=['POST'])
 def callback():
