@@ -19,36 +19,44 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
 
-cities = ['基隆市','嘉義市','臺北市','嘉義縣','新北市','臺南市','桃園縣','高雄市','新竹市','屏東縣','新竹縣','臺東縣','苗栗縣','花蓮縣','臺中市','宜蘭縣','彰化縣','澎湖縣','南投縣','金門縣','雲林縣','連江縣']
+cities = ['基隆市','嘉義市','臺北市','嘉義縣','新北市','臺南市','桃園市','高雄市','新竹市','屏東縣','新竹縣','臺東縣','苗栗縣','花蓮縣','臺中市','宜蘭縣','彰化縣','澎湖縣','南投縣','金門縣','雲林縣','連江縣']
 
 region_data = [
     {
+        "thumbnail": "https://i.imgur.com/Ay7IkdS.jpg",
         "title": "北部推薦景點",
         "text": "North",
-        "thumbnail": "https://i.imgur.com/Ay7IkdS.jpg",
-        "description": "台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。",
-        "url": "https://taiwantour.net/taiwan-attractions/"
+        "postback_data": {
+            "guide": "guide_north",
+            "url": "https://taiwantour.net/taiwan-attractions/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
         "title": "中部推薦景點",
         "text": "West",
-        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
-        "description": "台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。",
-        "url": "https://travel.line.me/article/A1fp6dm8v0"
+        "postback_data": {
+            "guide": "guide_west",
+            "url": "https://travel.line.me/article/A1fp6dm8v0"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/l32E20S.jpg",
         "title": "南部推薦景點",
         "text": "South",
-        "thumbnail": "https://imgur.com/gallery/2-RorqPFk",
-        "description": "台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。",
-        "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
+        "postback_data": {
+            "guide": "guide_south",
+            "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
         "title": "東部推薦景點",
         "text": "East",
-        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
-        "description": "台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。",
-        "url": "https://fullfen.tw/taitung-lazy-bag/"
+        "postback_data": {
+            "guide": "guide_east",
+            "url": "https://fullfen.tw/taitung-lazy-bag/"
+        }
     }
 ]
 movie_data = [
@@ -100,33 +108,41 @@ movie_data = [
 ]
 food_data = [
     {
+        "thumbnail": "https://i.imgur.com/LGjze2M.jpg",
         "title": "北部推薦美食",
         "text": "North",
-        "thumbnail": "https://i.imgur.com/LGjze2M.jpg",
-        "description": '台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！',
-        "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        "postback_data": {
+            "guide": "food_north",
+            "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        }
     },
     {
-        "title": "中部推薦景美食",
-        "text": "West",
         "thumbnail": "https://i.imgur.com/MmtibnZ.jpg",
-        "description": "中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！",
-        "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
+        "title": "中部推薦美食",
+        "text": "North",
+        "postback_data": {
+            "guide": "food_west",
+            "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/HnHzZDr.jpg",
         "title": "南部推薦美食",
         "text": "South",
-        "thumbnail": "https://i.imgur.com/HnHzZDr.jpg",
-        "description": "南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！",
-        "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
+        "postback_data": {
+            "guide": "food_south",
+            "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
+        }
     },
     {
+        "thumbnail": "https://i.imgur.com/c5YLRbi.jpg",
         "title": "東部推薦美食",
         "text": "East",
-        "thumbnail": "https://i.imgur.com/c5YLRbi.jpg",
-        "description": "東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！",
-        "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
-    }
+        "postback_data": {
+            "guide": "food_east",
+            "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+        }
+    },
 ]
 
 
@@ -142,37 +158,35 @@ def get_weather(city):
     return res
 
 def create_carousel_column(data):
+    """動態生成 CarouselColumn"""
     return CarouselColumn(
         thumbnail_image_url=data["thumbnail"],
         title=data["title"],
         text=data["text"],
         actions=[
-            MessageAction(label="導覽", text=data["description"]),
-            URIAction(label="詳細資訊", uri=data["url"])
-        ]
-    )
-
-def create_image_carousel_column(item):
-    if "url" in item:
-        return {
-            "imageUrl": item["thumbnail"],
-            "action": {
-                "type": "uri",
-                "label": item["title"],
-                "uri": item["url"]
-            }
-        }
-    return {
-        "imageUrl": item["thumbnail"],
-        "action": PostbackAction(
-            label=item["title"],  # 顯示在按鈕上的標題
-            display_text=item["description"],  # 顯示在使用者點擊後的描述
-            data=item["data"]  # 用來辨識的資料
+             PostbackAction(
+                label="導覽",
+                data=data["postback_data"]["guide"],
+                display_text="顯示導覽內容"  # 客戶端顯示的訊息
+            ),
+            PostbackAction(
+                label="詳細資訊",
+                data=data["postback_data"]["url"],
+                display_text="詳細資訊連結"  # 客戶端顯示的訊息
+                )
+            ]
         )
-    }
 
-
-
+def create_image_carousel_column(data):
+    """動態生成 ImageCarouselColumn"""
+    return ImageCarouselColumn(
+        image_url=data["thumbnail"],
+        action=PostbackAction(
+            label=data["title"],
+            display_text=data["description"],
+            data=data["data"]
+        )
+    )
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -186,6 +200,55 @@ def callback():
         abort(400)
 
     return 'OK'
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    data = event.postback.data
+    if data == "guide_north":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。")
+        )
+    elif data == "guide_west":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。")
+        )
+    elif data == "guide_south":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。")
+        )
+    elif data == "guide_east":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。")
+        )
+    elif data == "food_north":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！")
+        )
+    elif data == "food_west":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！")
+        )
+    elif data == "food_south":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！")
+        )
+    elif data == "food_east":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！")
+        )      
+    elif data.startswith("https://"):
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"詳細資訊：{data}")
+        )
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -205,7 +268,7 @@ def handle_message(event):
                         CarouselColumn(
                             thumbnail_image_url='https://i.imgur.com/Ex3Opfo.png',
                             title=f"{res[0][0]['startTime'][5:-3]} ~ {res[0][0]['endTime'][5:-3]}",
-                            text=f"天氣狀況 {data[0]['parameter']['parameterName']}\n溫度 {data[2]['parameter']['parameterName']} ~ {data[4]['parameter']['parameterName']} °C\n降雨機率 {data[1]['parameter']['parameterName']}",
+                            text=f"天氣狀況: {data[0]['parameter']['parameterName']}\n溫度: {data[2]['parameter']['parameterName']} ~ {data[4]['parameter']['parameterName']} °C\n降雨機率: {data[1]['parameter']['parameterName']} %",
                             actions=[
                                 URIAction(
                                     label='詳細內容',
@@ -220,7 +283,7 @@ def handle_message(event):
     elif re.match('我想出去玩', user_message):
         columns = [create_carousel_column(region) for region in region_data]
         carousel_template_message = TemplateSendMessage(
-            alt_text='熱門旅行景點',
+            alt_text="熱門旅行景點",
             template=CarouselTemplate(columns=columns)
         )
         line_bot_api.reply_message(event.reply_token, carousel_template_message) 
@@ -234,15 +297,15 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
 
     elif re.match('我想吃東西', user_message):
-        columns = [create_image_carousel_column(food) for food in food_data]
-        image_carousel_template_message = TemplateSendMessage(
+        columns = [create_carousel_column(food) for food in food_data]
+        carousel_template_message = TemplateSendMessage(
             alt_text='推薦美食清單',
-            template=ImageCarouselTemplate(columns=columns)
+            template=CarouselTemplate(columns=columns)
         )
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, carousel_template_message)
 
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「天氣 縣市」、「我想出去玩」、「我想看電影」或「我想吃東西」'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「天氣 縣市」、「我想出去玩」、「我想看電影」或「我想吃東西」!'))
 import os 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
