@@ -268,7 +268,7 @@ def handle_message(event):
                         CarouselColumn(
                             thumbnail_image_url='https://i.imgur.com/Ex3Opfo.png',
                             title=f"日期/時間:{res[0][0]['startTime'][5:-3]} ~ {res[0][0]['endTime'][5:-3]}",
-                            text=f"天氣狀況:{data[0]['parameter']['parameterName']}\n溫度:{data[2]['parameter']['parameterName']} ~ {data[4]['parameter']['parameterName']} °C\n降雨機率: {data[1]['parameter']['parameterName']} %",
+                            text=f"天氣狀況:{data[0]['parameter']['parameterName']}\n溫度:{data[2]['parameter']['parameterName']} ~ {data[4]['parameter']['parameterName']} °C\n降雨機率:{data[1]['parameter']['parameterName']} %",
                             actions=[
                                 URIAction(
                                     label='詳細內容',
