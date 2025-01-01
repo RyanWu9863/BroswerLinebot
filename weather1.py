@@ -11,30 +11,128 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import *
-import json,requests
+import json, requests, re
 
 app = Flask(__name__)
 
 # 必須放上自己的 Channel Access Token 和 Channel Secret
-line_bot_api = LineBotApi('OS7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('S7DP6ph0sWeOWVyIr9c7ZV3NuqYkVlTfY5+CSnWblopXBqRFYuU8HSaaAQ9nNWYo3Ufdm/q6OxemxpP7wqFw5XwXkFvlwaf+pwKdp5BlgewaeaVILO3FUi5xbISRjNyhSzMGxIfVEn6HWYVeOiyzqQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('65be4975efb12e6e52a9ef33e73f393b')
 
-@app.route("/callback", methods=['POST'])
-def callback():
-    signature = request.headers['X-Line-Signature']
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    print(body)
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-    return 'OK'
 cities = ['基隆市','嘉義市','臺北市','嘉義縣','新北市','臺南市','桃園縣','高雄市','新竹市','屏東縣','新竹縣','臺東縣','苗栗縣','花蓮縣','臺中市','宜蘭縣','彰化縣','澎湖縣','南投縣','金門縣','雲林縣','連江縣']
 
-def get(city):
+region_data = [
+    {
+        "title": "北部推薦景點",
+        "text": "North",
+        "thumbnail": "https://i.imgur.com/Ay7IkdS.jpg",
+        "description": "台灣北部擁有多元景點，如懷舊山城九份老街、自然美景陽明山、奇特地質野柳、夕陽迷人的淡水老街、傳統文化平溪天燈，以及台北101與士林夜市的現代繁華。",
+        "url": "https://taiwantour.net/taiwan-attractions/"
+    },
+    {
+        "title": "中部推薦景點",
+        "text": "West",
+        "thumbnail": "https://i.imgur.com/7NRdD4E.jpg",
+        "description": "台灣中部有清境農場的高山美景、日月潭的湖光山色、鹿港小鎮的古樸風情，以及谷關溫泉的休閒享受，融合自然與人文魅力。",
+        "url": "https://travel.line.me/article/A1fp6dm8v0"
+    },
+    {
+        "title": "南部推薦景點",
+        "text": "South",
+        "thumbnail": "https://imgur.com/gallery/2-RorqPFk",
+        "description": "台灣南部有墾丁的熱帶沙灘、佛光山的宗教文化、高雄港的繁華夜景，以及台南古城的歷史遺跡，展現多元風貌。",
+        "url": "https://yoke918.tw/tag/%E5%8D%97%E9%83%A8%E6%97%85%E9%81%8A%E6%99%AF%E9%BB%9E/"
+    },
+    {
+        "title": "東部推薦景點",
+        "text": "East",
+        "thumbnail": "https://i.imgur.com/616EwoZ.jpg",
+        "description": "台灣東部擁有太魯閣壯麗峽谷、清水斷崖海岸美景、花蓮七星潭的碧海藍天，以及台東鹿野高台的熱氣球嘉年華，魅力十足。",
+        "url": "https://fullfen.tw/taitung-lazy-bag/"
+    }
+]
+movie_data = [
+    {
+        "title": "SPY×FAMILY",
+        "thumbnail": "https://i.imgur.com/miOnNkN.jpg",
+        "description": (
+            "劇情介紹: 劇場版《SPY×FAMILY CODE: White》由作者遠藤達哉監製，描述佛傑一家北國旅遊的溫馨故事。"
+            "上映日期: 2024/1/19\n觀看預告片: https://www.youtube.com/watch?v=-4g5k-WoT-g"
+        ),
+        "data": "action=SPY_FAMILY"
+    },
+    {
+        "title": "排球少年",
+        "thumbnail": "https://i.imgur.com/UKtun5m.jpg",
+        "description": (
+            "劇情介紹: 烏野高中與音駒高中的宿命對決，精彩排球大賽即將展開！"
+            "上映日期: 2024/4/12\n觀看預告片: https://www.youtube.com/watch?v=gK6RbuM3U7Y"
+        ),
+        "data": "action=HAIKYUUA"
+    },
+    {
+        "title": "小丑:雙重瘋狂",
+        "thumbnail": "https://i.imgur.com/v49IxTk.jpg",
+        "description": (
+            "劇情介紹: 「小丑」在精神病院中遇到崇拜他的「病人」哈莉·奎茵，兩人也在途中發展一場極度危險又扭曲的浪漫戀情"
+            "上映日期: 2024/10/2\n觀看預告片: https://www.youtube.com/watch?v=rIhJSOArJVc"
+        ),
+        "data": "action=JOKER"
+    },
+    {
+        "title": "夏天隧道，再見出口",
+        "thumbnail": "https://i.imgur.com/47cHVwl.jpg",
+        "description": (
+            "劇情介紹: 一場跨越時間與空間的奇幻冒險，探索隧道的奧秘。"
+            "上映日期: 2022/12/2\n觀看預告片: https://www.youtube.com/watch?v=Izh-45jS3DE"
+        ),
+        "data": "action=SUMMER_TUNNEL"
+    },
+    {
+        "title": "更多電影",
+        "thumbnail": "https://i.imgur.com/stm5m9e.jpg",
+        "description": (
+            "更多電影介紹:http://www.atmovies.com.tw/movie/next/"
+        ),
+        "data": "action=MORE_MOVIE"
+    }
+
+]
+food_data = [
+    {
+        "title": "北部推薦美食",
+        "text": "North",
+        "thumbnail": "https://i.imgur.com/LGjze2M.jpg",
+        "description": '台北永康街的小籠包、士林夜市雞排，基隆廟口的蚵仔煎，淡水老街的阿給，還有新竹城隍廟的米粉與貢丸湯，地方特色讓人回味無窮！',
+        "url": "https://www.welcometw.com/%E5%8F%B0%E5%8C%97%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+    },
+    {
+        "title": "中部推薦景美食",
+        "text": "West",
+        "thumbnail": "https://i.imgur.com/MmtibnZ.jpg",
+        "description": "中部美食獨具魅力，彰化肉圓彈牙香濃，南投日月潭阿薩姆紅茶濃郁，台中太陽餅與逢甲夜市美食應有盡有，苗栗客家小炒與擂茶更是風味十足，讓人一試成主顧！",
+        "url": "https://www.welcometw.com/%e5%8f%b0%e4%b8%ad%e7%be%8e%e9%a3%9f%e9%a4%90%e5%bb%b3%e6%8e%a8%e8%96%a6%ef%bd%9c%e7%b2%be%e9%81%b8-12-%e9%96%93%e5%8f%b0%e4%b8%ad%e5%bf%85%e5%90%83%e7%be%8e%e9%a3%9f%e3%80%8a%e9%8d%8b%e7%89%a9/"
+    },
+    {
+        "title": "南部推薦美食",
+        "text": "South",
+        "thumbnail": "https://i.imgur.com/HnHzZDr.jpg",
+        "description": "南部美食充滿熱情，台南的牛肉湯與虱目魚粥鮮美，旗津的海產與烤小卷超讚，鹽埕的蚵仔煎與冬瓜茶經典，還有墾丁的炸鮮奶與大街小吃，絕對令人難忘！",
+        "url": "https://www.welcometw.com/%e5%8f%b0%e5%8d%97%e7%be%8e%e9%a3%9f/"
+    },
+    {
+        "title": "東部推薦美食",
+        "text": "East",
+        "thumbnail": "https://i.imgur.com/c5YLRbi.jpg",
+        "description": "東部美食天然純樸，花蓮的炸彈蔥油餅與扁食鮮美，台東池上的米飯香Q，長濱的海鮮新鮮可口，還有阿美族的烤山豬肉與小米麻糬，濃濃原民風味令人難忘！",
+        "url": "https://www.welcometw.com/%E5%8F%B0%E6%9D%B1%E7%BE%8E%E9%A3%9F%E6%8E%A8%E8%96%A6/"
+    }
+]
+
+
+def get_weather(city):
     token = 'CWA-3995D289-1BE9-45B6-AD6F-5496915DB347'
-    url = 'https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=' + token + '&format=JSON&locationName=' + str(city)
+    url = f'https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={token}&format=JSON&locationName={city}'
     Data = requests.get(url)
     Data = json.loads(Data.text)['records']['location'][0]['weatherElement']
     res = [[] , [] , []]
@@ -43,41 +141,110 @@ def get(city):
             res[j].append(i['time'][j])
     return res
 
-# Message event
-@handler.add(MessageEvent)
+def create_carousel_column(data):
+    return CarouselColumn(
+        thumbnail_image_url=data["thumbnail"],
+        title=data["title"],
+        text=data["text"],
+        actions=[
+            MessageAction(label="導覽", text=data["description"]),
+            URIAction(label="詳細資訊", uri=data["url"])
+        ]
+    )
+
+def create_image_carousel_column(item):
+    if "url" in item:
+        return {
+            "imageUrl": item["thumbnail"],
+            "action": {
+                "type": "uri",
+                "label": item["title"],
+                "uri": item["url"]
+            }
+        }
+    return {
+        "imageUrl": item["thumbnail"],
+        "action": PostbackAction(
+            label=item["title"],  # 顯示在按鈕上的標題
+            display_text=item["description"],  # 顯示在使用者點擊後的描述
+            data=item["data"]  # 用來辨識的資料
+        )
+    }
+
+
+
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message_type = event.message.type
-    user_id = event.source.user_id
-    reply_token = event.reply_token
-    message = event.message.text
-    if(message[:2] == '天氣'):
-        city = message[3:]
-        city = city.replace('台','臺')
-        if(not (city in cities)):
-            line_bot_api.reply_message(reply_token,TextSendMessage(text="查詢格式為: 天氣 縣市"))
+    user_message = event.message.text
+
+    if user_message.startswith('天氣'):
+        city = user_message[3:]
+        city = city.replace('台', '臺')
+        if not (city in cities):
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="查詢格式為: 天氣 縣市"))
         else:
-            res = get(city)
-            line_bot_api.reply_message(reply_token, TemplateSendMessage(
-                alt_text = city + '未來 36 小時天氣預測',
-                template = CarouselTemplate(
-                    columns = [
+            res = get_weather(city)
+            line_bot_api.reply_message(event.reply_token, TemplateSendMessage(
+                alt_text=f'{city}未來 36 小時天氣預測',
+                template=CarouselTemplate(
+                    columns=[
                         CarouselColumn(
-                            thumbnail_image_url = 'https://i.imgur.com/Ex3Opfo.png',
-                            title = '{} ~ {}'.format(res[0][0]['startTime'][5:-3],res[0][0]['endTime'][5:-3]),
-                            text = '天氣狀況 {}\n溫度 {} ~ {} °C\n降雨機率 {}'.format(data[0]['parameter']['parameterName'],data[2]['parameter']['parameterName'],data[4]['parameter']['parameterName'],data[1]['parameter']['parameterName']),
-                            actions = [
+                            thumbnail_image_url='https://i.imgur.com/Ex3Opfo.png',
+                            title=f"{res[0][0]['startTime'][5:-3]} ~ {res[0][0]['endTime'][5:-3]}",
+                            text=f"天氣狀況 {data[0]['parameter']['parameterName']}\n溫度 {data[2]['parameter']['parameterName']} ~ {data[4]['parameter']['parameterName']} °C\n降雨機率 {data[1]['parameter']['parameterName']}",
+                            actions=[
                                 URIAction(
-                                    label = '詳細內容',
-                                    uri = 'https://www.cwa.gov.tw/V8/C/W/County/index.html'
+                                    label='詳細內容',
+                                    uri='https://www.cwa.gov.tw/V8/C/W/County/index.html'
                                 )
                             ]
-                        )for data in res
+                        ) for data in res
                     ]
                 )
             ))
+
+    elif re.match('我想出去玩', user_message):
+        columns = [create_carousel_column(region) for region in region_data]
+        carousel_template_message = TemplateSendMessage(
+            alt_text='熱門旅行景點',
+            template=CarouselTemplate(columns=columns)
+        )
+        line_bot_api.reply_message(event.reply_token, carousel_template_message) 
+
+    elif re.match('我想看電影', user_message):
+        columns = [create_image_carousel_column(movie) for movie in movie_data]
+        image_carousel_template_message = TemplateSendMessage(
+            alt_text='推薦電影清單',
+            template=ImageCarouselTemplate(columns=columns)
+        )
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+
+    elif re.match('我想吃東西', user_message):
+        columns = [create_image_carousel_column(food) for food in food_data]
+        image_carousel_template_message = TemplateSendMessage(
+            alt_text='推薦美食清單',
+            template=ImageCarouselTemplate(columns=columns)
+        )
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+
     else:
-        line_bot_api.reply_message(reply_token, TextSendMessage(text=message))
-import os
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='請輸入「天氣 縣市」、「我想出去玩」、「我想看電影」或「我想吃東西」'))
+import os 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 80))
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
